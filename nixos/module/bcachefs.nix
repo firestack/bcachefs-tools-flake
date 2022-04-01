@@ -1,3 +1,4 @@
+{ selfpkgs, ... }:
 ## Mirrors: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/tasks/filesystems/bcachefs.nix
 ## with changes to use flakes and import mount.bcachefs
 { config, lib, pkgs, utils, ... }:
@@ -13,24 +14,21 @@ in
 {
 	options.filesystems.bcachefs.packages.tools = lib.mkOption {
 		description = "Which package to use to link in the bcachefs tools package";
-		default = pkgs.bcachefs.tools;
-		type = lib.types.package;
-	};
-	options.filesystems.bcachefs.packages.mount = lib.mkOption {
-		description = "Which package to use to link in the bcachefs mount package";
-		default = pkgs.bcachefs.mount;
+		default = selfpkgs.bcachefs-tools;
 		type = lib.types.package;
 	};
 	options.filesystems.bcachefs.packages.kernelPackages = lib.mkOption {
 		description = "Which package to use to link in the kernel package to use";
-		default = pkgs.bcachefs.kernelPackages;
+		default = selfpkgs.kernelPackages;
 		type = lib.types.attrs;
 
 	};
 
 	config = mkIf (elem "bcachefs" config.boot.supportedFilesystems) (mkMerge [
 		{
-			system.fsPackages = [ cfg.packages.tools cfg.packages.mount ];
+			system.fsPackages = [ 
+				cfg.packages.tools
+			];
 
 			# use kernel package with bcachefs support until it's in mainline
 			boot.kernelPackages = cfg.packages.kernelPackages;
