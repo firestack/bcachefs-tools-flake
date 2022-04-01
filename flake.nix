@@ -31,5 +31,7 @@
 			inherit (pkgs) lib;
 		in {
 		}) // {
+			nixosModule = self.nixosModules.bcachefs;
+			nixosModules.bcachefs = import ./nixos/module/bcachefs.nix;
 		};
 }
