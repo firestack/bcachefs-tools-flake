@@ -33,5 +33,13 @@
 		}) // {
 			nixosModule = self.nixosModules.bcachefs;
 			nixosModules.bcachefs = import ./nixos/module/bcachefs.nix;
+			nixosModules.bcachefs-enable-boot = ({config, pkgs, lib, ... }:{
+				# Disable Upstream NixOS Module when this is in use
+				disabledModules = [ "tasks/filesystems/bcachefs.nix" ];
+
+				# Add bcachefs to boot and kernel
+				boot.initrd.supportedFilesystems = [ "bcachefs" ];
+				boot.supportedFilesystems = [ "bcachefs" ];
+			});
 		};
 }
