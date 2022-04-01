@@ -17,4 +17,19 @@
 			flake = false;
 		};
 	};
+
+
+
+	outputs = { self, nixpkgs, utils, ... }@inputs:
+		let
+			# System types to support.
+			supportedSystems = [ "x86_64-linux" ];
+		in
+		utils.lib.eachSystem supportedSystems (system: 
+		let 
+			pkgs = nixpkgs.legacyPackages.${system}; 
+			inherit (pkgs) lib;
+		in {
+		}) // {
+		};
 }
