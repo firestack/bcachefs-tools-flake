@@ -20,16 +20,26 @@
 
 
 
-	outputs = { self, nixpkgs, utils, ... }@inputs:
+	outputs = { self, bcachefs-tools, nixpkgs, utils, ... }@inputs:
 		let
 			# System types to support.
 			supportedSystems = [ "x86_64-linux" ];
 		in
 		utils.lib.eachSystem supportedSystems (system: 
 		let 
+			selfpkgs = self.packages.${system};
 			pkgs = nixpkgs.legacyPackages.${system}; 
 			inherit (pkgs) lib;
 		in {
+			defaultPackage = selfpkgs.bcachefs-tools;
+			packages = {
+				bcachefs-tools = pkgs.callPackage ./bcachefs-tools.nix {
+					src = bcachefs-tools;
+					sourceInfo = bcachefs-tools;
+				};
+			};
+			devShell = self.devShells.${system}.tools;
+			devShells.tools = selfpkgs.bcachefs-tools.override { inShell = true; };
 		}) // {
 			nixosModule = self.nixosModules.bcachefs;
 			nixosModules.bcachefs = import ./nixos/module/bcachefs.nix;
