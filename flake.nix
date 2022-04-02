@@ -70,6 +70,12 @@
 				})
 			];
 			});
+
+			overlay = self.overlays.bcachefs;
+			overlays.bcachefs = (final: prev: {
+				inherit (self.packages.${final.system})
+					bcachefs-tools;
+			});
 		}
 		// utils.lib.eachSystem supportedSystems
 			(system:
