@@ -35,7 +35,7 @@
 		{
 			nixosModule = self.nixosModules.bcachefs;
 			nixosModules.bcachefs = import ./nixos/module/bcachefs.nix {
-				selfpkgs = self.packages.x86_64-linux;
+				selfpkgs = system: (self.packages.${system} // self.legacyPackages.${system});
 			};
 			nixosModules.bcachefs-enable-boot = ({config, pkgs, lib, ... }:{
 				# Disable Upstream NixOS Module when this is in use
