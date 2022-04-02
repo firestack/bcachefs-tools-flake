@@ -26,15 +26,16 @@ in
 
 	config = mkIf (elem "bcachefs" config.boot.supportedFilesystems) (mkMerge [
 		{
-			system.fsPackages = [ 
+			system.fsPackages = [
 				cfg.packages.tools
+				# cfg.packages.mount
 			];
 
 			# use kernel package with bcachefs support until it's in mainline
 			boot.kernelPackages = cfg.packages.kernelPackages;
 		}
 
-		(mkIf ((elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != {})) {
+		(mkIf ((elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != { })) {
 			# chacha20 and poly1305 are required only for decryption attempts
 			boot.initrd.availableKernelModules = [ "sha256" "chacha20" "poly1305" ];
 			boot.initrd.kernelModules = [ "bcachefs" ];
