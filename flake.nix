@@ -100,5 +100,8 @@
 							debugMode = true;
 						};
 					};
+
+					checks = { 
+					};
 				});
 }
