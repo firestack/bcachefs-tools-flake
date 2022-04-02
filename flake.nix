@@ -13,7 +13,10 @@
 		};
 
 		bcachefs-tools = {
-			url = "github:koverstreet/bcachefs-tools";
+			type = "github";
+			owner = "koverstreet";
+			repo = "bcachefs-tools";
+			# ref = "format-security";
 			flake = false;
 		};
 	};
