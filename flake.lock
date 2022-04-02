@@ -3,11 +3,11 @@
     "bcachefs-tools": {
       "flake": false,
       "locked": {
-        "lastModified": 1648760228,
-        "narHash": "sha256-7yVDQCP9fog9bvTX57BwxtoecIr+ohMm3pcQItHIfFU=",
+        "lastModified": 1648931789,
+        "narHash": "sha256-uPhhMm0NSZlLShQlqAAcyxd9RwVwbx2M986iWmsteCM=",
         "owner": "koverstreet",
         "repo": "bcachefs-tools",
-        "rev": "70f2681838973f20a918b518f82d382b3556963d",
+        "rev": "32aabbc4e547592f957de7d4b093986e55981085",
         "type": "github"
       },
       "original": {
