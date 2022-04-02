@@ -25,6 +25,10 @@
 
 	outputs = { self, bcachefs-tools, nixpkgs, utils, ... }@inputs:
 		let
+			readFileValue = filePath: let inherit (nixpkgs) lib;
+				removeLineFeeds = str: lib.lists.foldr (lib.strings.removeSuffix) str [ "\r" "\n" ];
+				file = builtins.readFile filePath;
+			in removeLineFeeds file;
 			# System types to support.
 			supportedSystems = [ "x86_64-linux" ];
 		in
