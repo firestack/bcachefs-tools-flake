@@ -77,6 +77,13 @@
 					packages = self.packages.${system};
 					pkgs = nixpkgs.legacyPackages.${system};
 					inherit (nixpkgs) lib;
+
+					getPatch = { commit, sha256, kernelVersion, ... }: pkgs.fetchurl {
+						inherit sha256;
+						passthru = { inherit commit; };
+						name = "bcachefs-${commit}.diff";
+						url = "https://evilpiepirate.org/git/bcachefs.git/rawdiff/?id=${commit}&id2=v${lib.versions.majorMinor kernelVersion}";
+					};
 				in
 				{
 					defaultPackage = packages.bcachefs-tools;
