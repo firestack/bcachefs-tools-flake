@@ -94,6 +94,11 @@
 
 							testWithValgrind = false;
 						};
+
+						bcachefs-tools-debug = packages.bcachefs-tools.override {
+							testWithValgrind = true;
+							debugMode = true;
+						};
 					};
 				});
 }
