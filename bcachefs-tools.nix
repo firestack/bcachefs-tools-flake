@@ -1,13 +1,12 @@
 { lib
 
-
-# Version and Source info
+	# Version and Source info
 , src
 , sourceInfo ? null
 , rev-string ? (sourceInfo.shortRev or sourceInfo.lastModifiedDate)
 , git-tag ? "v0.1"
 
-# NixOS dependencies
+	# NixOS dependencies
 , stdenv
 , pkg-config
 , attr
@@ -15,7 +14,7 @@
 , libsodium
 , keyutils
 
-# Explicit BCacheFS dependencies
+	# Explicit BCacheFS dependencies
 , liburcu
 , zlib
 , libaio
@@ -23,7 +22,7 @@
 , zstd
 , lz4
 
-# Check & Test dependencies
+	# Check & Test dependencies
 , python39
 , python39Packages
 , docutils
@@ -33,10 +32,11 @@
 , debugMode ? inShell
 
 , testWithValgrind ? true
-, valgrind 
+, valgrind
 
 , fuseSupport ? false
-, fuse3 ? null }:
+, fuse3 ? null
+}:
 
 assert fuseSupport -> fuse3 != null;
 assert testWithValgrind -> valgrind != null;
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
 		docutils
 		python39Packages.pygments
 	] ++ (lib.optional fuseSupport fuse3)
-	++ (lib.optional testWithValgrind valgrind) ;
+	++ (lib.optional testWithValgrind valgrind);
 
 	makeFlags = [
 		"PREFIX=${placeholder "out"}"
@@ -100,8 +100,8 @@ stdenv.mkDerivation {
 		python39Packages.pytest
 		python39Packages.pytest-xdist
 	] ++ lib.optional testWithValgrind valgrind;
-	
-	checkFlags = [ 
+
+	checkFlags = [
 		"BCACHEFS_TEST_USE_VALGRIND=${if testWithValgrind then "yes" else "no"}"
 		# cannot escape spaces within make flags, quotes are stripped
 		"PYTEST_CMD=pytest" # "PYTEST_ARGS='-n4 --version'"
@@ -117,11 +117,13 @@ stdenv.mkDerivation {
 
 	dontStrip = debugMode == true;
 	passthru = {
-		bcachefs_revision = let 
-			file = builtins.readFile "${src}/.bcachefs_revision";
-			removeLineFeeds = str: lib.lists.foldr (lib.strings.removeSuffix) str ["\r" "\n"];
-		in removeLineFeeds file;
-		
+		bcachefs_revision =
+			let
+				file = builtins.readFile "${src}/.bcachefs_revision";
+				removeLineFeeds = str: lib.lists.foldr (lib.strings.removeSuffix) str [ "\r" "\n" ];
+			in
+			removeLineFeeds file;
+
 		tests = {
 			smoke-test = nixosTests.bcachefs;
 		};
@@ -130,10 +132,10 @@ stdenv.mkDerivation {
 	enableParallelBuilding = true;
 	meta = with lib; {
 		description = "Userspace tools for bcachefs";
-		homepage    = http://bcachefs.org;
-		license     = licenses.gpl2;
-		platforms   = platforms.linux;
-		maintainers = [];
+		homepage = http://bcachefs.org;
+		license = licenses.gpl2;
+		platforms = platforms.linux;
+		maintainers = [ ];
 
 	};
 }
