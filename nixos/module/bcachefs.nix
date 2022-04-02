@@ -6,7 +6,7 @@
 with lib;
 
 let
-
+	fpackages = selfpkgs config.nixpkgs.system;
 	bootFs = filterAttrs (n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)) config.fileSystems;
 	cfg = config.filesystems.bcachefs;
 in
@@ -14,12 +14,12 @@ in
 {
 	options.filesystems.bcachefs.packages.tools = lib.mkOption {
 		description = "Which package to use to link in the bcachefs tools package";
-		default = selfpkgs.bcachefs-tools;
+		default = fpackages.bcachefs-tools;
 		type = lib.types.package;
 	};
 	options.filesystems.bcachefs.packages.kernelPackages = lib.mkOption {
 		description = "Which package to use to link in the kernel package to use";
-		default = selfpkgs.kernelPackages;
+		default = fpackages.kernelPackages;
 		type = lib.types.attrs;
 
 	};
