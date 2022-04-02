@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 	#       Issue: https://github.com/koverstreet/bcachefs/issues/398
 	#  Workaround: https://github.com/koverstreet/bcachefs-tools/pull/114
 	# Resolved by: https://github.com/koverstreet/bcachefs/commit/ab3b6e7dd69c5cd5dfd96fd265ade6897720f671
-	hardeningDisable = [ "format" ];
+	hardeningEnable = [ "format" ];
 
 	pname = "bcachefs-tools";
 
