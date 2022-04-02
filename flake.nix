@@ -32,22 +32,7 @@
 			# System types to support.
 			supportedSystems = [ "x86_64-linux" ];
 		in
-		utils.lib.eachSystem supportedSystems (system: 
-		let 
-			selfpkgs = self.packages.${system};
-			pkgs = nixpkgs.legacyPackages.${system}; 
-			inherit (pkgs) lib;
-		in {
-			defaultPackage = selfpkgs.bcachefs-tools;
-			packages = {
-				bcachefs-tools = pkgs.callPackage ./bcachefs-tools.nix {
-					src = bcachefs-tools;
-					sourceInfo = bcachefs-tools;
-				};
-			};
-			devShell = self.devShells.${system}.tools;
-			devShells.tools = selfpkgs.bcachefs-tools.override { inShell = true; };
-		}) // {
+		{
 			nixosModule = self.nixosModules.bcachefs;
 			nixosModules.bcachefs = import ./nixos/module/bcachefs.nix {
 				selfpkgs = self.packages.x86_64-linux;
@@ -60,5 +45,23 @@
 				boot.initrd.supportedFilesystems = [ "bcachefs" ];
 				boot.supportedFilesystems = [ "bcachefs" ];
 			});
-		};
+		}
+		// utils.lib.eachSystem supportedSystems
+			(system:
+				let
+					packages = self.packages.${system};
+					pkgs = nixpkgs.legacyPackages.${system};
+					inherit (nixpkgs) lib;
+				in
+				{
+					defaultPackage = packages.bcachefs-tools;
+					packages = {
+						bcachefs-tools = pkgs.callPackage ./bcachefs-tools.nix {
+							src = bcachefs-tools;
+							sourceInfo = bcachefs-tools;
+
+							testWithValgrind = false;
+						};
+					};
+				});
 }
