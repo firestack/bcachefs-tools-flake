@@ -103,5 +103,8 @@
 
 					checks = { 
 					};
+
+					devShell = self.devShells.${system}.bcachefs-tools;
+					devShells.bcachefs-tools = packages.bcachefs-tools-debug.override { inShell = true; };
 				});
 }
