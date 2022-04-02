@@ -45,6 +45,31 @@
 				boot.initrd.supportedFilesystems = [ "bcachefs" ];
 				boot.supportedFilesystems = [ "bcachefs" ];
 			});
+
+			nixosConfigurations.netboot-bcachefs = self.systems.netboot-bcachefs "x86_64-linux";
+			systems.netboot-bcachefs = system: (nixpkgs.lib.nixosSystem {
+				inherit system; modules = [
+				self.nixosModule
+				self.nixosModules.bcachefs-enable-boot
+				("${nixpkgs}/nixos/modules/installer/netboot/netboot-minimal.nix")
+				({ lib, pkgs, config, ... }: {
+					# installation disk autologin
+					services.getty.autologinUser = lib.mkForce "root";
+					users.users.root.initialPassword = "toor";
+
+					# Symlink everything together
+					system.build.netboot = pkgs.symlinkJoin {
+						name = "netboot";
+						paths = with config.system.build; [
+							netbootRamdisk
+							kernel
+							netbootIpxeScript
+						];
+						preferLocalBuild = true;
+					};
+				})
+			];
+			});
 		}
 		// utils.lib.eachSystem supportedSystems
 			(system:
