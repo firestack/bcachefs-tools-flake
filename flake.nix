@@ -94,6 +94,9 @@
 					};
 				in
 				{
+					legacyPackages.kernelPackages = lib.recurseIntoAttrs (pkgs.linuxPackagesFor packages.kernel);
+					legacyPackages.kernelPackages-latest = lib.recurseIntoAttrs (pkgs.linuxPackagesFor packages.kernel-latest);
+
 					defaultPackage = packages.bcachefs-tools;
 					packages = {
 						bcachefs-tools = pkgs.callPackage ./bcachefs-tools.nix {
@@ -106,6 +109,23 @@
 						bcachefs-tools-debug = packages.bcachefs-tools.override {
 							testWithValgrind = true;
 							debugMode = true;
+						};
+
+						# Kernels built from source
+						"linuxKernel/kernels/linux_bcachefs" = self.packages.${system}.kernel;
+						kernel = pkgs.callPackage ./bcachefs-kernel.nix {
+							commit = packages.bcachefs-tools.bcachefs_revision;
+							kernelVersion = pkgs.linuxKernel.kernels.linux_5_16.version;
+							sha256 = readFileValue ./pins/bcachefs-kernel.sha256;
+							kernelPatches = [ ];
+						};
+
+						"linuxKernel/kernels/linux_bcachefs/latest" = self.packages.${system}.kernel-latest;
+						kernel-latest = pkgs.callPackage ./bcachefs-kernel.nix {
+							commit = latest-kernel-commit;
+							kernelVersion = pkgs.linuxKernel.kernels.linux_5_16.version;
+							sha256 = readFileValue ./pins/bcachefs-kernel.latest.sha256;
+							kernelPatches = [ ];
 						};
 
 						# Kernels built as a patch
