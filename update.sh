@@ -21,7 +21,10 @@ function get-latest-commmit-id {
 
 nix flake lock --recreate-lock-file
 
+prefetch-url ".#kernel.src" > ./pins/bcachefs-kernel.sha256
+prefetch-url ".#kernel-latest.src" > ./pins/bcachefs-kernel.latest.sha256
+
 get-latest-commmit-id "https://evilpiepirate.org/git/bcachefs.git" "HEAD" > ./pins/bcachefs-kernel.latest.rev
 
-prefetch-url ".#bcachefs-patch" ./pins/bcachefs-kernel.patch.sha256
-prefetch-url ".#bcachefs-patch-latest" ./pins/bcachefs-kernel.patch.latest.sha256
+prefetch-url ".#bcachefs-kernel-patch" ./pins/bcachefs-kernel.patch.sha256
+prefetch-url ".#bcachefs-kernel-latest-patch" ./pins/bcachefs-kernel.patch.latest.sha256

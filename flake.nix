@@ -130,13 +130,13 @@
 
 						# Kernels built as a patch
 						# Patch files
-						bcachefs-patch = getPatch {
+						bcachefs-kernel-patch = getPatch {
 							commit = packages.bcachefs-tools.bcachefs_revision;
 							sha256 = (readFileValue ./pins/bcachefs-kernel.patch.sha256);
 							kernelVersion = pkgs.linuxKernel.kernels.linux_5_16.version;
 						};
 
-						bcachefs-patch-latest = getPatch {
+						bcachefs-kernel-latest-patch = getPatch {
 							commit = latest-kernel-commit;
 							sha256 = (readFileValue ./pins/bcachefs-kernel.patch.latest.sha256);
 							kernelVersion = pkgs.linuxKernel.kernels.linux_5_16.version;
@@ -146,23 +146,25 @@
 						"linuxKernel/kernels/linux_bcachefs/patched" = self.packages.${system}.kernel-patched;
 						kernel-patched = pkgs.callPackage ./bcachefs-kernel.patch.nix {
 							kernel = pkgs.linuxKernel.kernels.linux_5_16;
-							patch = packages.bcachefs-patch;
+							patch = packages.bcachefs-kernel-patch;
 							kernelPatches = [ ];
 						};
 
 						"linuxKernel/kernels/linux_bcachefs/patched/latest" = self.packages.${system}.kernel-patched-latest;
 						kernel-patched-latest = pkgs.callPackage ./bcachefs-kernel.patch.nix {
 							kernel = pkgs.linuxKernel.kernels.linux_5_16;
-							patch = packages.bcachefs-patch-latest;
+							patch = packages.bcachefs-kernel-latest-patch;
 							kernelPatches = [ ];
 						};
+
+
 					};
 
 					checks = { 
 						inherit (packages) 
 							bcachefs-tools-debug
-							bcachefs-patch
-							bcachefs-patch-latest;
+							bcachefs-kernel-patch
+							bcachefs-kernel-latest-patch;
 
 						kernelSrc = packages.kernel.src;
 					};
