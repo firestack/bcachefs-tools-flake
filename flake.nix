@@ -84,6 +84,8 @@
 					pkgs = nixpkgs.legacyPackages.${system};
 					inherit (nixpkgs) lib;
 
+					latest-kernel-commit = readFileValue ./pins/bcachefs-kernel.latest.rev;
+
 					getPatch = { commit, sha256, kernelVersion, ... }: pkgs.fetchurl {
 						inherit sha256;
 						passthru = { inherit commit; };
@@ -104,6 +106,20 @@
 						bcachefs-tools-debug = packages.bcachefs-tools.override {
 							testWithValgrind = true;
 							debugMode = true;
+						};
+
+						# Kernels built as a patch
+						# Patch files
+						bcachefs-patch = getPatch {
+							commit = packages.bcachefs-tools.bcachefs_revision;
+							sha256 = (readFileValue ./pins/bcachefs-kernel.patch.sha256);
+							kernelVersion = pkgs.linuxKernel.kernels.linux_5_16.version;
+						};
+
+						bcachefs-patch-latest = getPatch {
+							commit = latest-kernel-commit;
+							sha256 = (readFileValue ./pins/bcachefs-kernel.patch.latest.sha256);
+							kernelVersion = pkgs.linuxKernel.kernels.linux_5_16.version;
 						};
 					};
 
