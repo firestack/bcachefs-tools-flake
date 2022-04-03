@@ -168,6 +168,11 @@
 
 						kernelSrc = packages.kernel.src;
 					};
+					
+					hydraJobs = (
+						self.checks.${system} //
+						self.packages.${system}
+					);
 
 					devShell = self.devShells.${system}.bcachefs-tools;
 					devShells.bcachefs-tools = packages.bcachefs-tools-debug.override { inShell = true; };
