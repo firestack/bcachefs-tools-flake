@@ -96,6 +96,8 @@
 				{
 					legacyPackages.kernelPackages = lib.recurseIntoAttrs (pkgs.linuxPackagesFor packages.kernel);
 					legacyPackages.kernelPackages-latest = lib.recurseIntoAttrs (pkgs.linuxPackagesFor packages.kernel-latest);
+					legacyPackages.patchedKernelPackages = lib.recurseIntoAttrs (pkgs.linuxPackagesFor packages.kernel-patched);
+					legacyPackages.patchedKernelPackages-latest = lib.recurseIntoAttrs (pkgs.linuxPackagesFor packages.kernel-patched-latest);
 
 					defaultPackage = packages.bcachefs-tools;
 					packages = {
