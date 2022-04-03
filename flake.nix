@@ -148,6 +148,8 @@
 							bcachefs-tools-debug
 							bcachefs-patch
 							bcachefs-patch-latest;
+
+						kernelSrc = packages.kernel.src;
 					};
 
 					devShell = self.devShells.${system}.bcachefs-tools;
