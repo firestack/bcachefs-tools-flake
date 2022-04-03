@@ -42,8 +42,8 @@ in
 
 			boot.initrd.extraUtilsCommands = ''
 				copy_bin_and_libs ${cfg.packages.tools}/bin/bcachefs
-				copy_bin_and_libs ${cfg.packages.mount}/bin/mount.bcachefs
 			'';
+				# copy_bin_and_libs ${cfg.packages.mount}/bin/mount.bcachefs
 			boot.initrd.extraUtilsCommandsTest = ''
 				$out/bin/bcachefs version
 				$out/bin/mount.bcachefs --version
