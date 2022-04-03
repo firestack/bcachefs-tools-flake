@@ -144,6 +144,10 @@
 					};
 
 					checks = { 
+						inherit (packages) 
+							bcachefs-tools-debug
+							bcachefs-patch
+							bcachefs-patch-latest;
 					};
 
 					devShell = self.devShells.${system}.bcachefs-tools;
