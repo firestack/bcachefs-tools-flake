@@ -112,7 +112,6 @@
 						};
 
 						# Kernels built from source
-						"linuxKernel/kernels/linux_bcachefs" = self.packages.${system}.kernel;
 						kernel = pkgs.callPackage ./bcachefs-kernel.nix {
 							commit = packages.bcachefs-tools.bcachefs_revision;
 							kernelVersion = "5.16.0";
@@ -120,7 +119,6 @@
 							kernelPatches = [ ];
 						};
 
-						"linuxKernel/kernels/linux_bcachefs/latest" = self.packages.${system}.kernel-latest;
 						kernel-latest = pkgs.callPackage ./bcachefs-kernel.nix {
 							commit = latest-kernel-commit;
 							kernelVersion = "5.16.0";
@@ -143,14 +141,12 @@
 						};
 
 						#Kernel Derivations
-						"linuxKernel/kernels/linux_bcachefs/patched" = self.packages.${system}.kernel-patched;
 						kernel-patched = pkgs.callPackage ./bcachefs-kernel.patch.nix {
 							kernel = pkgs.linuxKernel.kernels.linux_5_16;
 							patch = packages.bcachefs-kernel-patch;
 							kernelPatches = [ ];
 						};
 
-						"linuxKernel/kernels/linux_bcachefs/patched/latest" = self.packages.${system}.kernel-patched-latest;
 						kernel-patched-latest = pkgs.callPackage ./bcachefs-kernel.patch.nix {
 							kernel = pkgs.linuxKernel.kernels.linux_5_16;
 							patch = packages.bcachefs-kernel-latest-patch;
